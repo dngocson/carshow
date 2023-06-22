@@ -3,13 +3,14 @@ import { useState } from "react";
 import Image from "next/image";
 import { CarProps } from "@/type";
 import CustomButton from "./CustomButton";
-import { calculateCarRent } from "@/utils";
+import { calculateCarRent, generateCarImageUrl } from "@/utils";
+import CarDetail from "./CarDetail";
 interface CarCardProps {
   car: CarProps;
 }
 const CarCard = ({ car }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
-  const [isOen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const carRent = calculateCarRent(city_mpg, year);
   return (
     <div className="car-card group">
@@ -25,7 +26,7 @@ const CarCard = ({ car }: CarCardProps) => {
       </p>
       <div className="relative w-full h-40 my-3 object-contain">
         <Image
-          src="/hero.png"
+          src={generateCarImageUrl(car)}
           alt="car model"
           fill
           priority
@@ -66,7 +67,11 @@ const CarCard = ({ car }: CarCardProps) => {
           />
         </div>
       </div>
-      <CarDetails />
+      <CarDetail
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        car={car}
+      />
     </div>
   );
 };
